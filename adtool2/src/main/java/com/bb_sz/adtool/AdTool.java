@@ -93,7 +93,8 @@ public class AdTool {
             }
 
         if (isExist) {
-            checkVersion();
+            // not need check when the version of apktool is up 2.2.0
+//            checkVersion();
             //re pkg apk
             apk();
             //sign
