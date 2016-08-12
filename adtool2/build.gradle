@@ -4,14 +4,6 @@ version = '1.0.0'
 archivesBaseName = "adtool"
 
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-    }
-}
-
 //依赖编译，然后打包JAR
 task taskJar(type: Jar, dependsOn: compileJava) {
     from 'build/classes'
