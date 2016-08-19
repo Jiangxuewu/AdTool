@@ -1,27 +1,26 @@
 apply plugin: 'java'
 
-version = '1.0.1'
 archivesBaseName = "adtool"
 
 
-//依赖编译，然后打包JAR
-task taskJar(type: Jar, dependsOn: compileJava) {
-    from 'build/classes'
-    destinationDir = file('build/libs')
-}
-
-//清除上次的编译过的文件
-task clearPj(type: Delete) {
-    delete 'build', 'out'
-}
-
-//把JAR复制到目标目录
-task release1(type: Copy, dependsOn: [clearPj, taskJar]) {
-    from('build/libs') {
-        include '*.jar'
-    }
-    into('out')
-}
+////依赖编译，然后打包JAR
+//task taskJar(type: Jar, dependsOn: compileJava) {
+//    from 'build/classes'
+//    destinationDir = file('build/libs')
+//}
+//
+////清除上次的编译过的文件
+//task clearPj(type: Delete) {
+//    delete 'build', 'out'
+//}
+//
+////把JAR复制到目标目录
+//task release1(type: Copy, dependsOn: [clearPj, taskJar]) {
+//    from('build/libs') {
+//        include '*.jar'
+//    }
+//    into('out')
+//}
 
 
 //args "out/" + archivesBaseName + "_" + getVersion() + ".jar"
@@ -35,10 +34,12 @@ def makeJar(String target, String manifest, String classDir) {
     }
 }
 task delExi(type: Delete){
-    delete "out/" + archivesBaseName + "_" + getVersion() + ".jar"
+    delete "out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar"
 }
-task release(dependsOn:['build', compileJava]){
-    makeJar("out/" + archivesBaseName + "_" + getVersion() + ".jar","MANIFEST.MF","build/classes/main")
+task release() {
+    if (file("build/classes/main").exists())
+    makeJar("out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar","MANIFEST.MF",
+            "build/classes/main")
 }
 
 

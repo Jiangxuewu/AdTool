@@ -1,5 +1,7 @@
 package com.bb_sz.adtool;
 
+import com.bb_sz.tool.Contents;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,6 +45,7 @@ public class AdTool {
     private static boolean isNotAdd2 = false;
 
     private static String runPath;
+    private static boolean isGetPkg;
 
     public static void main(String[] args) {
         runPath = getPath();
@@ -50,6 +53,15 @@ public class AdTool {
         rootPath = MoBanSDKPath + "\\smali";
         if (debug) System.out.print("runPath:" + runPath + "\n");
         if (!checkParam(args)) {
+            if (args.length == 1) {
+                if (args[0].contains("-v") || args[0].contains("-version")) {
+                    System.out.print(Contents._VERSION + "\n");
+                    return;
+                } else if (args[0].contains("-h") || args[0].contains("-help")) {
+                    System.out.print(Contents._HELP + "\n");
+                    return;
+                }
+            }
             System.err.print("apk file error");
             return;
         }
@@ -59,11 +71,16 @@ public class AdTool {
         uid = args[1];
         pid = args[2];
         cid = args[3];
+        isGetPkg = "p".equals(uid) || "P".equals(uid);
         debug = args.length > 4 && "1".equals(args[4]);
         isNotAdd2 = args.length > 5 && "1".equals(args[5]);
         //read params
 //        initParams();
         boolean isExist = new File(getSrcApkOutPath()).exists();
+
+        if (isExist && isGetPkg) {
+            exec("rd /s/q " + getSrcApkOutPath());
+        }
 
         //un pkg apk
         if (!isExist) {
@@ -73,6 +90,9 @@ public class AdTool {
         if (!readApkInfo()) {
             System.err.print("un apk failed. pkg:" + srcApkPackage + ", injectClsName:" + injectClsName + ", packageString:" + packageString);
             return;
+        }
+        if (isGetPkg) {
+            System.out.print(srcApkPackage);
         }
 
         //copy sdk code
@@ -115,6 +135,12 @@ public class AdTool {
         if (!arg[0].endsWith(".apk")) {
             return false;
         }
+
+        if (debug)
+            for (int i = 0; i < arg.length; i++) {
+                System.out.print(arg[i] + "\n");
+            }
+
         if (arg.length < 4) {
             return false;
         }
@@ -345,7 +371,11 @@ public class AdTool {
                 } else if (addType == 2 && line.endsWith("Application;->onCreate()V")) {
                     line += "\n" + sb.toString() + "\n";
                 }
-                dw.write(line + "\n");
+                //need remove method(Lcom/wd/WDTUtils;->init) if exist.
+                //invoke-static {p0}, Lcom/wd/WDTUtils;->init(Landroid/content/Context;)V
+                if (!line.contains("Lcom/wd/WDTUtils;->init")) {
+                    dw.write(line + "\n");
+                }
             }
             dw.close();
             dr.close();
