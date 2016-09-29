@@ -214,6 +214,9 @@ public class ApkTools {
                     FileTools.copyDir(getSrcLibFilePath(item.getName()), item);
                 }
             }
+        } else {
+            libs.mkdir();
+            FileTools.copyDir(new File(IOTools.getPath() + "\\ShellSrc\\lib"), libs);
         }
     }
 
