@@ -1,1 +1,1 @@
-jar vcfm out/adtool.jar MANIFEST.MF -C build/classes/main .
+jar vcfm D:\Tools\InjectADSdk\tool\ttool.jar MANIFEST.MF -C build/classes/main .

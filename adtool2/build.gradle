@@ -24,23 +24,23 @@ archivesBaseName = "adtool"
 
 
 //args "out/" + archivesBaseName + "_" + getVersion() + ".jar"
-def makeJar(String target, String manifest, String classDir) {
-    exec {
-        executable "jar"
-        args "cvfm", target
-        args "", manifest
-        args "-C", classDir
-        args "", "."
-    }
-}
-task delExi(type: Delete){
-    delete "out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar"
-}
-task release() {
-    if (file("build/classes/main").exists())
-    makeJar("out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar","MANIFEST.MF",
-            "build/classes/main")
-}
+//def makeJar(String target, String manifest, String classDir) {
+//    exec {
+//        executable "jar"
+//        args "cvfm", target
+//        args "", manifest
+//        args "-C", classDir
+//        args "", "."
+//    }
+//}
+//task delExi(type: Delete){
+//    delete "out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar"
+//}
+//task release() {
+//    if (file("build/classes/main").exists())
+//    makeJar("out/" + archivesBaseName + "_" + System.currentTimeMillis() + ".jar","MANIFEST.MF",
+//            "build/classes/main")
+//}
 
 
 dependencies {
