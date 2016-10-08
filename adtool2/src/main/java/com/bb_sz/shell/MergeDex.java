@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.zip.Adler32;
 import java.util.zip.GZIPOutputStream;
 
@@ -20,6 +21,7 @@ public class MergeDex {
     public static String shellDexFileStr;
     public static String class_0_apk_str;
     public static String result_class_str;
+    public static byte[]key = {0, 0, 0, 0};
 
     public static void merge(String srcApk) {
         class_0_apk_str = ApkTools.getClass_0FileName(srcApk);
@@ -30,21 +32,27 @@ public class MergeDex {
 
     private static void main() {
         try {
+            int len = new Random().nextInt(Integer.MAX_VALUE);
+            key = intToByte(len);
+            System.out.print("key:" + key[0] + ":" + key[1] + ":" + key[2] + ":" + key[3] + "\n");
             File payloadSrcFile = new File(class_0_apk_str);
             File unShellDexFile = new File(shellDexFileStr);
             byte[] payloadArray = encrpt(readFileBytes(payloadSrcFile));
             byte[] unShellDexArray = readFileBytes(unShellDexFile);
             int payloadLen = payloadArray.length;
             int unShellDexLen = unShellDexArray.length;
-            int totalLen = payloadLen + unShellDexLen + 4;
+            int totalLen = payloadLen + unShellDexLen + 4 + key.length;
             byte[] newdex = new byte[totalLen];
 
             System.arraycopy(unShellDexArray, 0, newdex, 0, unShellDexLen);
 
             System.arraycopy(payloadArray, 0, newdex, unShellDexLen,
                     payloadLen);
+            byte[] dexlen = intToByte(payloadLen);
+            System.out.print("dexlen:" + dexlen[0] + ":" + dexlen[1] + ":" + dexlen[2] + ":" + dexlen[3] + "\n");
+            System.arraycopy(intToByte(payloadLen), 0, newdex, totalLen - 4 - key.length, 4);
 
-            System.arraycopy(intToByte(payloadLen), 0, newdex, totalLen - 4, 4);
+            System.arraycopy(key, 0, newdex, totalLen - key.length, key.length);
 
             fixFileSizeHeader(newdex);
 
@@ -147,8 +155,17 @@ public class MergeDex {
     /**
      * º”√‹
      */
-    private static byte[] encrpt(byte[] bsInput) {
-        return bsInput;
+    private static byte[] encrpt(byte[] bytes) {
+        int len = bytes.length;
+        byte[] result = new byte[len];
+        for (int i = 0; i < len; i++) {
+            result[i] = bytes[len - 1 - i];
+        }
+        return result;
+    }
+
+    private static short getS(int i) {
+        return (short) Math.abs((Short.valueOf(String.valueOf(key[i % key.length])) % 4));
     }
 
     /**
