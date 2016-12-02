@@ -1,1 +1,2 @@
-include ':app', ':adtool2'
+include ':adtool2'
+include ':app'

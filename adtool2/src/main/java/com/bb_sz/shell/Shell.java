@@ -1,6 +1,8 @@
 package com.bb_sz.shell;
 
 
+import com.bb_sz.tool.Log;
+
 import java.io.File;
 
 import static com.bb_sz.tool.TManager.debug;
@@ -11,7 +13,13 @@ import static com.bb_sz.tool.TManager.debug;
 
 public class Shell {
 
+    private static final String TAG = Shell.class.getSimpleName();
+
     public static void run(String apk) {
+        if (null == apk || "".equals(apk)){
+            Log.e(TAG, "param error, apk path is invalid");
+            return;
+        }
         main(apk);
     }
 

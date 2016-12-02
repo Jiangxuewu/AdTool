@@ -21,9 +21,9 @@ archivesBaseName = "adtool"
 //    }
 //    into('out')
 //}
-
-
-//args "out/" + archivesBaseName + "_" + getVersion() + ".jar"
+//
+//
+////args "out/" + archivesBaseName + "_" + getVersion() + ".jar"
 //def makeJar(String target, String manifest, String classDir) {
 //    exec {
 //        executable "jar"

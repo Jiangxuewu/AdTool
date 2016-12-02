@@ -21,7 +21,7 @@ public class MergeDex {
     public static String shellDexFileStr;
     public static String class_0_apk_str;
     public static String result_class_str;
-    public static byte[]key = {0, 0, 0, 0};
+    public static byte[] key = {0, 0, 0, 0};
 
     public static void merge(String srcApk) {
         class_0_apk_str = ApkTools.getClass_0FileName(srcApk);
@@ -159,7 +159,11 @@ public class MergeDex {
         int len = bytes.length;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++) {
-            result[i] = bytes[len - 1 - i];
+            if (i > 7) {
+                result[i] = bytes[len + 7 - i];
+            } else {
+                result[i] = bytes[i];
+            }
         }
         return result;
     }

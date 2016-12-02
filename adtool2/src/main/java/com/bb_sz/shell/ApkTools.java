@@ -256,15 +256,23 @@ public class ApkTools {
             if (item.isDirectory()) {
                 boolean delDirRes = FileTools.deleteDir(item);
                 if (debug) System.err.print("clean............delDirRes:" + delDirRes + "\n");
+                int i = 0;
                 while (!(delDirRes = FileTools.deleteDir(item))) {
                     if (debug) System.err.print("clean............delDirRes:" + delDirRes + "\n");
+                    if (i++ > 10) {
+                        break;
+                    }
                 }
                 if (debug) System.err.print("clean............delDirRes:" + delDirRes + "\n");
             } else if (!item.getAbsolutePath().equals(srcapk) && !item.getAbsolutePath().endsWith("ed.apk")) {
                 boolean delFileRes = FileTools.deleteFile(item.getAbsolutePath());
                 if (debug) System.err.print("clean............delFileRes:" + delFileRes + "\n");
+                int i = 0;
                 while (!(delFileRes = FileTools.deleteDir(item))) {
                     if (debug) System.err.print("clean............delFileRes:" + delFileRes + "\n");
+                    if (i++ > 10) {
+                        break;
+                    }
                 }
                 if (debug) System.err.print("clean............delFileRes:" + delFileRes + "\n");
             }

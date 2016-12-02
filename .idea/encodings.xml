@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/ApkTools.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/CMDTools.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/FileTools.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/IOTools.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/Main.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/MergeDex.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/Shell.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/shell/ZipUtils.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/adtool2/src/main/java/com/bb_sz/tool/TManager.java" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

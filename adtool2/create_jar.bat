@@ -1,1 +1,1 @@
-jar vcfm D:\Tools\InjectADSdk\tool\ttool.jar MANIFEST.MF -C build/classes/main .
+jar vcfm D:\Tools\InjectADSdk\tool\adtool.jar D:\Android\github\AdTool\adtool2\MANIFEST.MF -C D:\Android\github\AdTool\adtool2\build\classes\main .
