@@ -22,7 +22,7 @@ public class ZipUtils {
 
     public static void main(String[] args) {
 //        zip("D:\\zip测试", "D:\\测试结果.zip");
-        unZip("D:\\DengZong\\单击游戏添加自己SDK版本\\加壳后的\\天天消消乐\\ttxxl_C9915.apk", "D:\\DengZong\\单击游戏添加自己SDK版本\\加壳后的\\天天消消乐\\ttxxl_C9915_Test");
+        unZip("D:\\DengZong\\JPaySDK\\2017-01-12\\JPay", "D:\\DengZong\\JPaySDK\\2017-01-12\\JPay.jar");
     }
 
     /**

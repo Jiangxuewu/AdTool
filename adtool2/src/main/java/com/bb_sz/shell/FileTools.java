@@ -1,12 +1,11 @@
 package com.bb_sz.shell;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.bb_sz.tool.TManager.debug;
 
 /**
  * Created by Administrator on 2016/9/23.
@@ -17,9 +16,13 @@ public class FileTools {
         if (null == file) return false;
         return new File(file).delete();
     }
+
     public static boolean deleteDir(String file) {
-        return deleteDir(new File(file));
+        boolean result = deleteDir(new File(file));
+        return result;
     }
+
+
     public static boolean deleteDir(File dir) {
         if (null == dir || !dir.exists()) return true;
         if (dir.isDirectory()) {
@@ -35,6 +38,7 @@ public class FileTools {
         // delete empty dir
         return dir.delete();
     }
+
     public static boolean deleteDirExceptFile(File dir, File[] excepts) {
         if (null == dir || !dir.exists()) return true;
         if (dir.isDirectory()) {
@@ -48,9 +52,9 @@ public class FileTools {
             }
         }
 
-        if (null != excepts){
-            for (File item : excepts){
-                if (dir.getAbsolutePath().equals(item.getAbsolutePath())){
+        if (null != excepts) {
+            for (File item : excepts) {
+                if (dir.getAbsolutePath().equals(item.getAbsolutePath())) {
                     return true;
                 }
             }
@@ -97,12 +101,12 @@ public class FileTools {
 
 
     public static void copyDir(File from, File to) {
-        if (debug) System.out.print("copy Dir" + "\n");
+//        if (debug) System.out.print("copy Dir" + "\n");
         if (null == from || null == to) {
             return;
         }
-        if (debug)
-            System.out.print("copy Dir, from:" + from.getAbsolutePath() + ", to:" + to.getAbsolutePath() + "\n");
+//        if (debug)
+//            System.out.print("copy Dir, from:" + from.getAbsolutePath() + ", to:" + to.getAbsolutePath() + "\n");
         File[] file = from.listFiles();
 
         if (null == file) {
@@ -111,8 +115,8 @@ public class FileTools {
         for (File f : file) {
             if (f.isFile()) {
                 File newFile = createFile(to.getAbsoluteFile() + File.separator + f.getName());
-                if (debug)
-                    System.out.print("copy File, from:" + f.getAbsolutePath() + ", to:" + newFile.getAbsolutePath() + "\n");
+//                if (debug)
+//                    System.out.print("copy File, from:" + f.getAbsolutePath() + ", to:" + newFile.getAbsolutePath() + "\n");
                 copy(f, newFile);
             } else {
                 File t = new File(to.getAbsolutePath() + File.separator + f.getName());
@@ -122,6 +126,7 @@ public class FileTools {
     }
 
     public static File createFile(String filePath) {
+
         if (null == filePath) {
             return null;
         }

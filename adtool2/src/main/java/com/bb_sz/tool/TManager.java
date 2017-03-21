@@ -1,7 +1,10 @@
 package com.bb_sz.tool;
 
 import com.bb_sz.adtool.AdTool;
+import com.bb_sz.mulchannelapk.MulCSignApk;
 import com.bb_sz.shell.Shell;
+import com.bb_sz.tycp.TyCaiPiao;
+import com.bb_sz.tycp.TyHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +19,7 @@ import java.util.Set;
  */
 public class TManager {
 
-    public static final boolean debug = true;
+    public static final boolean debug = false;
 
     private static final String TAG = TManager.class.getSimpleName();
 
@@ -55,7 +58,7 @@ public class TManager {
     }
 
     private static void run(String line, ArrayList<String> options) {
-        if (debug) Log.i(TAG, "run line = " + line );
+        if (debug) Log.i(TAG, "run line = " + line);
         if (null == line) return;
         if ("-v".equals(line) || "-version".equals(line)) {
             System.out.print(Version.getVersion() + " \n");
@@ -66,8 +69,14 @@ public class TManager {
         } else if ("-s".equals(line) || "-shell".equals(line)) {// shell for apk
             if (null != options && options.size() > 0)
                 Shell.run(options.get(0));
+        } else if ("-d".equals(line) || "-c".equals(line)) {// 多渠道打包
+            if (null != options && options.size() > 0)
+                MulCSignApk.run(options.get(0));
+        } else if ("-f".equals(line) || "-t".equals(line)) {
+            TyCaiPiao.main(null);
+        } else if ("-g".equals(line) || "-b".equals(line)) {
+            TyHelper.main(null);
         }
-
     }
 
     private static void runAd(ArrayList<String> options) {

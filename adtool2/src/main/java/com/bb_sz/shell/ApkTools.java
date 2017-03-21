@@ -240,7 +240,13 @@ public class ApkTools {
         FileTools.copyFile(dexPath, dex);
 
         String lastFile = apkPath.replace(".apk", "ed.apk");
-        apkRS(outZipDir, lastFile);
+
+        if (null == Shell.shelledOutApk || Shell.shelledOutApk.length() < 1){
+            apkRS(outZipDir, lastFile);
+        } else {
+            apkRS(outZipDir, Shell.shelledOutApk);
+        }
+
     }
 
     public static void clean(String srcapk) {

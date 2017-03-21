@@ -1,5 +1,6 @@
 package com.bb_sz.adtool;
 
+import com.bb_sz.shell.FileTools;
 import com.bb_sz.tool.Contents;
 
 import java.io.BufferedReader;
@@ -293,7 +294,7 @@ public class AdTool {
         }
 
         if (!injectClsName.equals(DEFAULT_INJECT_NAME)) {
-            new File(getSrcApkOutPath() + File.separator + "com" + File.separator + "application" + File.separator + "TMApp.smali").deleteOnExit();
+            FileTools.deleteFile(getSrcApkOutPath() + File.separator + "com" + File.separator + "application" + File.separator + "TMApp.smali");
         }
 
         String injectName = injectClsName;

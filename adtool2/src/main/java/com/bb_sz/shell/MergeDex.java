@@ -1,6 +1,8 @@
 package com.bb_sz.shell;
 
 
+import com.bb_sz.tool.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,9 +34,9 @@ public class MergeDex {
 
     private static void main() {
         try {
-            int len = new Random().nextInt(Integer.MAX_VALUE);
-            key = intToByte(len);
-            System.out.print("key:" + key[0] + ":" + key[1] + ":" + key[2] + ":" + key[3] + "\n");
+            key = intToByte(new Random().nextInt(Integer.MAX_VALUE));
+            key[2] = (byte) (new Random().nextInt(10) + 7);
+            Log.i("", "key:" + key[0] + ":" + key[1] + ":" + key[2] + ":" + key[3] + "\n");
             File payloadSrcFile = new File(class_0_apk_str);
             File unShellDexFile = new File(shellDexFileStr);
             byte[] payloadArray = encrpt(readFileBytes(payloadSrcFile));
@@ -159,8 +161,8 @@ public class MergeDex {
         int len = bytes.length;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++) {
-            if (i > 7) {
-                result[i] = bytes[len + 7 - i];
+            if (i > key[2]) {
+                result[i] = bytes[len + key[2] - i];
             } else {
                 result[i] = bytes[i];
             }
