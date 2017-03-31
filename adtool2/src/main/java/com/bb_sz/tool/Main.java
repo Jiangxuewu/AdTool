@@ -4,9 +4,12 @@ import com.bb_sz.mulchannelapk.MulCSignApk;
 import com.bb_sz.shell.FileTools;
 
 import java.io.BufferedWriter;
+import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2016/8/12.
@@ -15,7 +18,19 @@ public class Main {
 
     public static void main(String[] args) {
         TManager.main(args);
-        File a;
+//        String str = " \n ";
+//        System.out.print("str = " + str);
+//        str = str.replaceAll("[\\t\\n\\r ]", "");
+//        System.out.print("str = " + str);
+//
+//        str = "  ";
+//        System.out.print("str = " + str);
+//        str = str.replaceAll("[\\t\\n\\r ]", "");
+//        System.out.print("str = " + str);
+
+        String test = "asdfas\r\r\r489\r\r48";
+        test = test.replaceAll("\\r", "\n");
+        System.out.print("test = " + test);
     }
 
     public static void test() {

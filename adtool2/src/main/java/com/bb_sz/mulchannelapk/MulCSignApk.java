@@ -42,6 +42,13 @@ public class MulCSignApk {
     private static String jpayJarPath = null;
     private static String bbszPath = null;
 
+    private static boolean notJpay = false;
+
+    public static void _run(String path) {
+        notJpay = true;
+        main(new String[]{path});
+    }
+
     public static void run(String path) {
         main(new String[]{path});
     }
@@ -65,7 +72,7 @@ public class MulCSignApk {
         Log.i(TAG, "channels size is " + channels.size());
         Log.i(TAG, "jpayJarPath = " + jpayJarPath);
         Log.i(TAG, "bbszPath = " + bbszPath);
-        if (null != jpayJarPath && jpayJarPath.length() > 0) {
+        if (!notJpay && null != jpayJarPath && jpayJarPath.length() > 0) {
             //unzip assets
             String parentPath = new File(jpayJarPath).getParent();
 
@@ -94,7 +101,7 @@ public class MulCSignApk {
 
             FileTools.copyDir(new File(parentPath + File.separator + "assets"), new File(jpaySmailPath + File.separator + "assets"));
             FileTools.deleteDir(parentPath + File.separator + "JPay.dex");
-        } else {
+        } else if (!notJpay){
             Log.e(TAG, "jpayJarPath is null.");
             return;
         }
@@ -171,7 +178,9 @@ public class MulCSignApk {
         //1, copy app
         copyDir(new File(templates), tmp, cid);
         //2, copy jpay
-        copyDir(new File(jpaySmailPath), tmp, cid);
+        if (!notJpay){
+            copyDir(new File(jpaySmailPath), tmp, cid);
+        }
         //3, copy bb_sz
         copyDir(new File(bbszPath), tmp, cid, true);
         //4, add permission

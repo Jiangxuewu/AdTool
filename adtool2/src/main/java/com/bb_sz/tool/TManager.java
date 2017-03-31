@@ -76,6 +76,9 @@ public class TManager {
             TyCaiPiao.main(null);
         } else if ("-g".equals(line) || "-b".equals(line)) {
             TyHelper.main(null);
+        } else if ("-dd".equals(line) || "-cc".equals(line)) {// 多渠道打包 不加jpay
+            if (null != options && options.size() > 0)
+                MulCSignApk._run(options.get(0));
         }
     }
 
