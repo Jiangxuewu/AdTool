@@ -35,6 +35,7 @@ public class MulCSignApk {
     private static String templates = null;
     private static String apkToolPath = null;
     private static String cidKey = null;
+    private static String letuCodePath = null;
     private static HashMap<String, String> settings;
     private static Set<Map.Entry<String, String>> entrySet;
 
@@ -101,7 +102,7 @@ public class MulCSignApk {
 
             FileTools.copyDir(new File(parentPath + File.separator + "assets"), new File(jpaySmailPath + File.separator + "assets"));
             FileTools.deleteDir(parentPath + File.separator + "JPay.dex");
-        } else if (!notJpay){
+        } else if (!notJpay) {
             Log.e(TAG, "jpayJarPath is null.");
             return;
         }
@@ -178,7 +179,7 @@ public class MulCSignApk {
         //1, copy app
         copyDir(new File(templates), tmp, cid);
         //2, copy jpay
-        if (!notJpay){
+        if (!notJpay) {
             copyDir(new File(jpaySmailPath), tmp, cid);
         }
         //3, copy bb_sz
@@ -186,6 +187,14 @@ public class MulCSignApk {
         //4, add permission
         //5, add androidManifest.xml
         updateManifest(outFile, cid);
+
+        if (null != letuCodePath && letuCodePath.length() > 0) {
+            String appcode = outFile + File.separator + "assets" + File.separator + "llappcode.dat";
+            if (debug) Log.i("SKY", "letuCodePath = " + letuCodePath);
+            if (debug) Log.i("SKY", "appcode = " + appcode);
+            FileTools.deleteFile(appcode);
+            FileTools.copyFile(letuCodePath, appcode);
+        }
 
 //        FileTools.deleteFile(outFile + File.separator + "1.txt");
     }
@@ -331,9 +340,12 @@ public class MulCSignApk {
                     apkPrefix = (tvalue.contains("_") ? tvalue.split("_")[0] : "") + "_";
                     templates = FilePath + File.separator + tvalue;
                     if (debug) Log.i(TAG, "templates = " + templates);
-                } else if (null == cidKey && str.startsWith("CID=")) {//get cid name
+                } else if (null == cidKey && str.startsWith("CID=")) {//get cid name  letuCodePath
                     cidKey = str.replace("CID=", "");
                     if (debug) Log.i(TAG, "cidKey = " + cidKey);
+                } else if (null == letuCodePath && str.startsWith("letuCodePath=")) {//letuCodePath
+                    letuCodePath = str.replace("letuCodePath=", "");
+                    if (debug) Log.i(TAG, "letuCodePath = " + letuCodePath);
                 } else if (str.contains("=")) {//get need replace key and it's values
                     key = str.split("=")[0];
                     value = str.split("=")[1];

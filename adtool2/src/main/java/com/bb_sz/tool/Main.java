@@ -9,12 +9,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2016/8/12.
  */
 public class Main {
+
+    static SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
         TManager.main(args);
@@ -28,9 +34,35 @@ public class Main {
 //        str = str.replaceAll("[\\t\\n\\r ]", "");
 //        System.out.print("str = " + str);
 
-        String test = "asdfas\r\r\r489\r\r48";
-        test = test.replaceAll("\\r", "\n");
-        System.out.print("test = " + test);
+//        String test = "asdfas\r\r\r489\r\r48";
+//        test = test.replaceAll("\\r", "\n");
+//        System.out.print("test = " + test);
+
+//        String time = "2017-03-31 17:42:11";
+//        Date date = null;
+//        try {
+//            date = sdf2.parse(time);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Calendar doneDar = Calendar.getInstance();
+//        doneDar.setTime(date);
+//        int week = doneDar.get(Calendar.DAY_OF_WEEK) - 1;
+//        int year = doneDar.get(Calendar.YEAR);
+//        int month = doneDar.get(Calendar.MONTH) + 1;
+//        int day = doneDar.get(Calendar.DAY_OF_MONTH);
+////        doneDar.set(year, month, day, 0, 0, 0);
+//        doneDar.set(Calendar.HOUR_OF_DAY, 0);
+//        doneDar.set(Calendar.MINUTE, 0);
+//        doneDar.set(Calendar.SECOND, 0);
+//
+//        long doneTime = doneDar.getTime().getTime();
+//        System.out.print(" year = " + year + "\n");
+//        System.out.print(" month = " + month + "\n");
+//        System.out.print(" day = " + day + "\n");
+//        System.out.print(" week = " + week + "\n");
+//        System.out.print(" doneTime = " + doneTime + "\n");
+//        System.out.print(" curTime = " + System.currentTimeMillis()+ "\n");
     }
 
     public static void test() {
