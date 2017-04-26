@@ -495,8 +495,12 @@ public class MulCSignApk {
             line = line.replace(cidKey, cid);
         }
 
-        if (null == entrySet)
+        if (null == entrySet){
+            if (notJpay){
+                settings.put("Lcom/jpay/sdk/IChargeResult;", "Lcom/bb_sz/pay/IChargeResult;");
+            }
             entrySet = settings.entrySet();
+        }
 
         for (Map.Entry<String, String> entry : entrySet) {
             if (line.contains(entry.getKey())) {
