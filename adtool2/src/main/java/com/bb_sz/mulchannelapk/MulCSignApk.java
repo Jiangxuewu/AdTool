@@ -44,7 +44,12 @@ public class MulCSignApk {
     private static String bbszPath = null;
 
     private static boolean notJpay = false;
+    private static boolean storeApp = false;
 
+    public static void __run(String path) {
+        storeApp = true;
+        _run(path);
+    }
     public static void _run(String path) {
         notJpay = true;
         main(new String[]{path});
@@ -142,6 +147,11 @@ public class MulCSignApk {
 //        if (1 == 11){//_C4349
 //            return;
 //        }
+
+        if (storeApp){
+
+            return;
+        }
 
         i = 1;
         String shellApkOutFile;

