@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.LinkedTransferQueue;
 
 import javax.swing.plaf.TextUI;
 
@@ -48,6 +49,7 @@ public class MulCSignApk {
 
     private static boolean notJpay = false;
     private static boolean storeApp = false;
+    private static HashMap<String,String> ymCIDMap = new HashMap<>();
 
     public static void __run(String path) {
         storeApp = true;
@@ -308,10 +310,15 @@ public class MulCSignApk {
             FileReader fr = new FileReader(settings);
             BufferedReader bf = new BufferedReader(fr);
             String str = null;
+            String cidTmp;
+            String ymcidTmp;
             while ((str = bf.readLine()) != null) {
                 if (!str.startsWith("#")) {
-                    map.add(str);
-                    if (debug) Log.i(TAG, "cid=" + str);
+                    cidTmp = (str.contains("=") ? str.split("=")[0] : str);
+                    ymcidTmp = (str.contains("=") ? str.split("=")[1] : str);
+                    map.add(cidTmp);
+                    ymCIDMap.put(cidTmp, ymcidTmp);
+                    if (debug) Log.i(TAG, "cid=" + cidTmp + ", ymcidTmp = " + ymcidTmp);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -508,11 +515,11 @@ public class MulCSignApk {
 
     private static String update(String line, String cid) {
         if (line.contains(cidKey)) {
-            line = line.replace(cidKey, (cid.contains("=") ? cid.split("=")[0] : cid));
+            line = line.replace(cidKey, cid);
         }
 
         if (null != YMCidKey){
-            line = line.replace(YMCidKey, (cid.contains("=") ? cid.split("=")[1] : cid));
+            line = line.replace(YMCidKey, ymCIDMap.get(cid));
         }
 
         if (null == entrySet){
