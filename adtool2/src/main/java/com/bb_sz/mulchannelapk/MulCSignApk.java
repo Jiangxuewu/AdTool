@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.plaf.TextUI;
+
 import static com.bb_sz.tool.TManager.debug;
 
 /**
@@ -35,6 +37,7 @@ public class MulCSignApk {
     private static String templates = null;
     private static String apkToolPath = null;
     private static String cidKey = null;
+    private static String YMCidKey = null;
     private static String letuCodePath = null;
     private static HashMap<String, String> settings;
     private static Set<Map.Entry<String, String>> entrySet;
@@ -353,6 +356,9 @@ public class MulCSignApk {
                 } else if (null == cidKey && str.startsWith("CID=")) {//get cid name  letuCodePath
                     cidKey = str.replace("CID=", "");
                     if (debug) Log.i(TAG, "cidKey = " + cidKey);
+                }  else if (null == YMCidKey && str.startsWith("YMCID=")) {//get YMCidKey name  letuCodePath
+                    YMCidKey = str.replace("YMCID=", "");
+                    if (debug) Log.i(TAG, "YMCidKey = " + YMCidKey);
                 } else if (null == letuCodePath && str.startsWith("letuCodePath=")) {//letuCodePath
                     letuCodePath = str.replace("letuCodePath=", "");
                     if (debug) Log.i(TAG, "letuCodePath = " + letuCodePath);
@@ -502,7 +508,11 @@ public class MulCSignApk {
 
     private static String update(String line, String cid) {
         if (line.contains(cidKey)) {
-            line = line.replace(cidKey, cid);
+            line = line.replace(cidKey, (cid.contains("=") ? cid.split("=")[0] : cid));
+        }
+
+        if (null != YMCidKey){
+            line = line.replace(YMCidKey, (cid.contains("=") ? cid.split("=")[1] : cid));
         }
 
         if (null == entrySet){

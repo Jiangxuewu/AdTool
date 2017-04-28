@@ -56,6 +56,10 @@ public class Main {
 //        System.out.print(" week = " + week + "\n");
 //        System.out.print(" doneTime = " + doneTime + "\n");
 //        System.out.print(" curTime = " + System.currentTimeMillis()+ "\n");
+
+//        String cid = "zz001=123_23424";
+//        Log.i("test", "cid = " + cid.split("=")[0]);
+//        Log.i("test", "cid = " + cid.split("=")[1]);
     }
 
     public static void test() {
