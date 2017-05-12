@@ -39,6 +39,7 @@ public class MulCSignApk {
     private static String apkToolPath = null;
     private static String cidKey = null;
     private static String YMCidKey = null;
+    private static String QBCidKey = null;
     private static String letuCodePath = null;
     private static HashMap<String, String> settings;
     private static Set<Map.Entry<String, String>> entrySet;
@@ -50,6 +51,7 @@ public class MulCSignApk {
     private static boolean notJpay = false;
     private static boolean storeApp = false;
     private static HashMap<String,String> ymCIDMap = new HashMap<>();
+    private static HashMap<String,String> QBCIDMap = new HashMap<>();
 
     public static void __run(String path) {
         storeApp = true;
@@ -312,13 +314,16 @@ public class MulCSignApk {
             String str = null;
             String cidTmp;
             String ymcidTmp;
+            String yycidTmp;
             while ((str = bf.readLine()) != null) {
                 if (!str.startsWith("#")) {
                     cidTmp = (str.contains("=") ? str.split("=")[0] : str);
                     ymcidTmp = (str.contains("=") ? str.split("=")[1] : str);
+                    yycidTmp = (str.contains("#") ? str.split("#")[1] : str);
                     map.add(cidTmp);
                     ymCIDMap.put(cidTmp, ymcidTmp);
-                    if (debug) Log.i(TAG, "cid=" + cidTmp + ", ymcidTmp = " + ymcidTmp);
+                    QBCIDMap.put(cidTmp, yycidTmp);
+                    if (debug) Log.i(TAG, "cid=" + cidTmp + ", ymcidTmp = " + ymcidTmp + ", yycidTmp = " + yycidTmp);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -366,6 +371,9 @@ public class MulCSignApk {
                 }  else if (null == YMCidKey && str.startsWith("YMCID=")) {//get YMCidKey name  letuCodePath
                     YMCidKey = str.replace("YMCID=", "");
                     if (debug) Log.i(TAG, "YMCidKey = " + YMCidKey);
+                }  else if (null == QBCidKey && str.startsWith("QBCID=")) {//get QBCidKey name
+                    QBCidKey = str.replace("QBCID=", "");
+                    if (debug) Log.i(TAG, "YYCidKey = " + QBCidKey);
                 } else if (null == letuCodePath && str.startsWith("letuCodePath=")) {//letuCodePath
                     letuCodePath = str.replace("letuCodePath=", "");
                     if (debug) Log.i(TAG, "letuCodePath = " + letuCodePath);
@@ -520,6 +528,10 @@ public class MulCSignApk {
 
         if (null != YMCidKey){
             line = line.replace(YMCidKey, ymCIDMap.get(cid));
+        }
+
+        if (null != QBCidKey){
+            line = line.replace(QBCidKey, QBCIDMap.get(cid));
         }
 
         if (null == entrySet){
