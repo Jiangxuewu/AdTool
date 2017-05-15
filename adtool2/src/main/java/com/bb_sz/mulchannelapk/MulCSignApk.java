@@ -319,7 +319,7 @@ public class MulCSignApk {
                 if (!str.startsWith("#")) {
                     cidTmp = (str.contains("=") ? str.split("=")[0] : str);
                     ymcidTmp = (str.contains("=") ? str.split("=")[1] : str);
-                    yycidTmp = (str.contains("#") ? str.split("#")[1] : str);
+                    yycidTmp = (str.contains("=") && str.split("=").length == 3 ? str.split("=")[2] : str);
                     map.add(cidTmp);
                     ymCIDMap.put(cidTmp, ymcidTmp);
                     QBCIDMap.put(cidTmp, yycidTmp);
