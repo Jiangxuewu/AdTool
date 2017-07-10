@@ -5,6 +5,8 @@ import com.bb_sz.mulchannelapk.MulCSignApk;
 import com.bb_sz.shell.Shell;
 import com.bb_sz.tycp.TyCaiPiao;
 import com.bb_sz.tycp.TyHelper;
+import com.bb_sz.umhelper.UMHelper;
+import com.bb_sz.windows.WinLinstener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +84,10 @@ public class TManager {
         } else if ("-ddd".equals(line) || "-ccc".equals(line)) {// ÉÌµêapp´ò°ü
             if (null != options && options.size() > 0)
                 MulCSignApk.__run(options.get(0));
+        } else if ("-v".equals(line) || "-vpn".equals(line)) {// vpn
+                WinLinstener.main2(options);
+        } else if ("-u".equals(line) || "-um".equals(line)) {// vpn
+            UMHelper.main(options.get(0));
         }
     }
 
