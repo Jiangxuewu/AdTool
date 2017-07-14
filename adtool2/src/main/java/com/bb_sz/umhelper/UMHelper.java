@@ -54,6 +54,8 @@ public class UMHelper {
         sb = null;
         sb = new StringBuffer();
         while (run) {
+            sb = null;
+            sb = new StringBuffer();
             if (isRightTime() || debug) {
                 getAppsDetails(1, 50, "install_yesterday", "desc");
                 sendResult();
