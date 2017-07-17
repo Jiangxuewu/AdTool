@@ -83,7 +83,7 @@ public class UMHelper {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         Log.i("hour", "" + hour);
-        return hour == 8 || debug;
+        return hour == 9 || debug;
     }
 
     private static void sendResult() {
