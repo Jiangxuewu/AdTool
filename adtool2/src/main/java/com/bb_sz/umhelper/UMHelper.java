@@ -38,17 +38,15 @@ public class UMHelper {
     public static HashMap<String, Integer> appResultMap;//app all install
     public static TreeMap<String, HashMap<String, Integer>> appCidDetailMap;// app cid install
     static StringBuffer sb = null;
-    public static final boolean debug = false;
+    public static boolean debug = true;
 
     public static void main(String[] args) {
-        main("");
+        main("11");
     }
 
     public static void main(String args) {
-        Log.i("main", "start, args is " + (null != args && args.length() > 0));
-        if (null != args && args.length() > 0) {
-            cookie = args;
-        }
+        debug = null != args && args.length() > 0;
+        Log.i("main", "start, debug is " + debug);
         if (null == cookie || cookie.length() <= 0) return;
         boolean run = true;
         sb = null;
@@ -56,13 +54,17 @@ public class UMHelper {
         while (run) {
             sb = null;
             sb = new StringBuffer();
+            resultMap = null;
+            appResultMap = null;
+            appCidDetailMap = null;
             if (isRightTime() || debug) {
                 getAppsDetails(1, 50, "install_yesterday", "desc");
                 sendResult();
                 sendResult2();
                 sendResult3();
                 int i = 60;
-                if (sb.toString().length() > 10){
+                if (sb.toString().length() > 10) {
+                    Log.i("SB", sb.toString());
                     sendEmail();
                 } else {
                     i = 1;
@@ -83,7 +85,7 @@ public class UMHelper {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         Log.i("hour", "" + hour);
-        return hour == 9 || debug;
+        return hour == 8 || debug;
     }
 
     private static void sendResult() {
@@ -220,6 +222,8 @@ public class UMHelper {
                             } else {
                                 resultMap.put(item.getChannel_name(), item.getInstallation());
                             }
+
+                            Log.i("CID", "app " + appName + ", install " + item.getInstallation() + ", key " + item.getChannel_name() + ", value " + resultMap.get(item.getChannel_name()));
 
                             if (tmpTree.containsKey(item.getChannel_name())) {
                                 tmpTree.put(item.getChannel_name(), item.getInstallation() + tmpTree.get(item.getChannel_name()));
