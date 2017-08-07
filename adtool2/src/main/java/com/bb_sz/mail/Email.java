@@ -26,9 +26,9 @@ public class Email {
 
     public static String myEmailSMTPHost = "smtp.bb-sz.com";
 
-    public static String receiveMailAccount = UMHelper.debug ? "jiangxuewu@iadmore.com" : "qiyin.luo@jfst.com.cn";
+    public static String receiveMailAccount = /*UMHelper.debug ? "jiangxuewu@iadmore.com" : */"qiyin.luo@jfst.com.cn";
     public static String receiveMailAccount2 = "jiangxuewu@iadmore.com";
-    public static String receiveMailAccount3 = UMHelper.debug ? "jiangxuewu@iadmore.com" : "kf@jfst.com.cn";
+    public static String receiveMailAccount3 = /*UMHelper.debug ? "jiangxuewu@iadmore.com" : */"kf@jfst.com.cn";
 
     public static void sendEmail(String title, String content) throws Exception {
 

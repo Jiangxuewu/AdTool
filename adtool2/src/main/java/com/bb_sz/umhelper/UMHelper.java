@@ -58,9 +58,9 @@ public class UMHelper {
             appResultMap = null;
             appCidDetailMap = null;
             if (isRightTime() || debug) {
-                getAppsDetails(1, 50, "install_yesterday", "desc");
+                getAppsDetails(1, 300, "install_yesterday", "desc");
                 sendResult();
-                sendResult2();
+//                sendResult2();
                 sendResult3();
                 int i = 60;
                 if (sb.toString().length() > 10) {
@@ -171,7 +171,9 @@ public class UMHelper {
     public static void getAppsDetails(int page, int perPage, String sort, String order) {
         String url = "http://mobile.umeng.com/apps/get_apps_stats_details?page=" + page + "&per_page=" + perPage
                 + "&type=all-apps-list&show_all=false&sort_metric=" + sort + "&order=" + order;
+        Log.i("http", "url = " + url);
         String res = sendGetReq(url, cookie);
+        Log.i("http", "res = " + res);
         if (null != res) {
             AppsDetailRes appsDetailRes = new Gson().fromJson(res, AppsDetailRes.class);
             if (null != appsDetailRes) {
@@ -199,7 +201,9 @@ public class UMHelper {
 
     public static void getAppChannelDetails(String appName, String app_id) {
         String url = "http://mobile.umeng.com/apps/" + app_id + "/game_reports/load_table_data?page=1&per_page=30&stats=channel_stats_details&daytime=yesterday";
+        Log.i("http", "url = " + url);
         String res = sendGetReq(url, cookie);
+        Log.i("http", "res = " + res);
         if (null != res) {
             AppChannelDetailRes appChannelDetailRes = new Gson().fromJson(res, AppChannelDetailRes.class);
             if (null != appChannelDetailRes) {

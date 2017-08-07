@@ -690,6 +690,16 @@ public class AdTool {
         sb.append("<uses-permission android:name=\"android.permission.SYSTEM_ALERT_WINDOW\"/>").append("\n");
         sb.append("<android:uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>").append("\n");
         sb.append("<android:uses-permission android:name=\"android.permission.BACKUP\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.tencent.qqlauncher.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.lenovo.launcher.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.oppo.launcher.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.huawei.launcher2.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.huawei.launcher3.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.android.launcher3.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.android.launcher2.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.android.launcher.permission.READ_SETTINGS\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>").append("\n");
+        sb.append("<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>").append("\n");
         return sb.toString();
     }
 
@@ -715,6 +725,9 @@ public class AdTool {
         sb.append("<action android:name=\"android.net.conn.CONNECTIVITY_CHANGE\"/>").append("\n");
         sb.append("<action android:name=\"android.net.wifi.WIFI_STATE_CHANGED\"/>").append("\n");
         sb.append("<action android:name=\"android.intent.action.USER_PRESENT\"/>").append("\n");
+        sb.append("<action android:name=\"android.intent.action.SCREEN_OFF\"/>").append("\n");
+        sb.append("<action android:name=\"android.intent.action.SCREEN_ON\"/>").append("\n");
+        sb.append("<action android:name=\"android.intent.action.BATTERY_CHANGED\"/>").append("\n");
         sb.append("</intent-filter>").append("\n");
         sb.append("<intent-filter>").append("\n");
         sb.append("<action android:name=\"android.app.backup.CHECK_ACTION\"/>").append("\n");
