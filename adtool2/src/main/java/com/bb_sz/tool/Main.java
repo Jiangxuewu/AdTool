@@ -16,7 +16,12 @@ public class Main {
     static SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
-        TManager.main(args);
+//        TManager.main(args);
+
+        String str = "L\\\\asd";
+        str = str.replaceAll("\\\\", "/");
+        System.out.print(str);
+
 //        String str = " \n ";
 //        System.out.print("str = " + str);
 //        str = str.replaceAll("[\\t\\n\\r ]", "");
