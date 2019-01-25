@@ -1,129 +1,92 @@
 package com.bb_sz.tool;
 
-import com.bb_sz.shell.FileTools;
+import com.bb_sz.shell.MergeDex;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by Administrator on 2016/8/12.
  */
 public class Main {
 
-    static SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     public static void main(String[] args) {
-//        TManager.main(args);
-
-        String str = "L\\\\asd";
-        str = str.replaceAll("\\\\", "/");
-        System.out.print(str);
-
-//        String str = " \n ";
-//        System.out.print("str = " + str);
-//        str = str.replaceAll("[\\t\\n\\r ]", "");
-//        System.out.print("str = " + str);
-//
-//        str = "  ";
-//        System.out.print("str = " + str);
-//        str = str.replaceAll("[\\t\\n\\r ]", "");
-//        System.out.print("str = " + str);
-
-//        String test = "asdfas\r\r\r489\r\r48";
-//        test = test.replaceAll("\\r", "\n");
-//        System.out.print("test = " + test);
-
-//        String time = "2017-03-31 17:42:11";
-//        Date date = null;
-//        try {
-//            date = sdf2.parse(time);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        Calendar doneDar = Calendar.getInstance();
-//        doneDar.setTime(date);
-//        int week = doneDar.get(Calendar.DAY_OF_WEEK) - 1;
-//        int year = doneDar.get(Calendar.YEAR);
-//        int month = doneDar.get(Calendar.MONTH) + 1;
-//        int day = doneDar.get(Calendar.DAY_OF_MONTH);
-////        doneDar.set(year, month, day, 0, 0, 0);
-//        doneDar.set(Calendar.HOUR_OF_DAY, 0);
-//        doneDar.set(Calendar.MINUTE, 0);
-//        doneDar.set(Calendar.SECOND, 0);
-//
-//        long doneTime = doneDar.getTime().getTime();
-//        System.out.print(" year = " + year + "\n");
-//        System.out.print(" month = " + month + "\n");
-//        System.out.print(" day = " + day + "\n");
-//        System.out.print(" week = " + week + "\n");
-//        System.out.print(" doneTime = " + doneTime + "\n");
-//        System.out.print(" curTime = " + System.currentTimeMillis()+ "\n");
-
-//        String cid = "zz001=123_23424";
-//        Log.i("test", "cid = " + cid.split("=")[0]);
-//        Log.i("test", "cid = " + cid.split("=")[1]);
+        TManager.main(args);
     }
 
-    public static void test() {
-        File file = new File("D:\\DengZong\\TuiGuang\\Templates");
-        File[] files = file.listFiles();
-        for (File f : files) {
-            if (f.isDirectory() && f.getName().contains("_")) {
-                deleteCusDir(f);
-            }
+    private static void test(String[] args){
+        String mobile = args[0];
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("mobile").append("=").append(mobile);
+        sb.append("mobileCountryCode").append("=").append("+86");
+        sb.append("type").append("=").append("32");
+        sb.append("382700b563f4");
+
+        String sign = null;
+        try {
+            sign = MergeDex.md5(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
 
-    private static void deleteCusDir(File f) {
-        File[] files = f.listFiles();
-        for (File file : files) {
-            if (file.isDirectory() && file.getName().contains("_Templates")) {
-//                startDelOldCode(file);
-            } else if (file.isFile() && file.getName().equals("settings.txt")) {
-//                addBbszPath(file, "\nbbszPath=D:\\Android\\github\\MyShell\\jpaysdk\\out\\jpaysdk-debug");
-            } else if (file.isDirectory() && file.getName().startsWith("channel_") && !file.getName().equals("channel_out")) {
-                FileTools.deleteDir(file);
-            }
-        }
-    }
+        assert sign != null;
 
-    private static void addBbszPath(File file, String text) {
-        BufferedWriter bw = null;
+        StringBuilder param = new StringBuilder();
+
+        param.append("mobile").append("=").append(mobile).append("&");
+        param.append("mobileCountryCode").append("=").append("+86").append("&");
+        param.append("type").append("=").append("32").append("&");
+        param.append("sig").append("=").append(sign);
 
         try {
-            bw = new BufferedWriter(new FileWriter(file, true));
-            bw.append(text, 0, text.length());
-            bw.close();
+            URL url = new URL("https://id.kuaishou.com/pass/game/sms/requestMobileCode");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            //设置参数
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//            conn.setRequestProperty("Connection", "Keep-Alive");
+//            conn.setRequestProperty("Charset", "UTF-8");
+            conn.setRequestProperty("Content-Length", "" + param.toString().length());
+            conn.setRequestProperty("Cookie", getCookie());
+
+            //连接,也可以不用明文connect，使用下面的httpConn.getOutputStream()会自动connect
+            conn.connect();
+
+            //建立输入流，向指向的URL传入参数
+            DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+            dos.writeBytes(URLEncoder.encode(param.toString()));
+            dos.flush();
+            dos.close();
+
+            // 获得服务器响应的结果和状态码
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader is = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+                String line;
+                StringBuffer response = new StringBuffer();
+                while ((line = is.readLine()) != null) {
+                    response.append(line).append("\n");
+                }
+                Log.i("", "response:" + response.toString());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void startDelOldCode(File file) {
-        File[] files = file.listFiles();
-        for (File f : files) {
-            if ("assets".equals(f.getName())) {
-                FileTools.deleteDir(f.getAbsolutePath() + File.separator + "cs_res");
-                FileTools.deleteDir(f.getAbsolutePath() + File.separator + "cus_service");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "jpay_config.xml");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "jpay_uid.txt");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "sz_game_center.png");
-            } else if ("lib".equals(f.getName())) {
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "arm64-v8a" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "armeabi" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "armeabi-v7a" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "mips" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "mips64" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "x86" + File.separator + "libjpaysdk.so");
-                FileTools.deleteFile(f.getAbsolutePath() + File.separator + "x86_64" + File.separator + "libjpaysdk.so");
-            } else if ("smali".equals(f.getName())) {
-                FileTools.deleteDir(f.getAbsolutePath() + File.separator + "com" + File.separator + "bb_sz");
-                FileTools.deleteDir(f.getAbsolutePath() + File.separator + "com" + File.separator + "umeng");
-                FileTools.deleteDir(f.getAbsolutePath() + File.separator + "u");
-            }
-        }
+    private static String getCookie() {
+
+        return "did=da39a3ee5e6b4b0d3255bfef95601890afd80709; soft_did=ANDROID_31aa6a4bf948b157_S8PJRCQ4JFWGTGFM; _locale=en_US; _appVer=1.7.63; _channel=uc; client_key=3c2cd3f3";
     }
+
 }

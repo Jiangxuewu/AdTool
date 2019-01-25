@@ -1,10 +1,10 @@
 package com.bb_sz.tool;
-
 import com.bb_sz.adtool.AdTool;
 import com.bb_sz.mulchannelapk.MulCSignApk;
 import com.bb_sz.shell.Shell;
-import com.bb_sz.tycp.TyCaiPiao;
-import com.bb_sz.tycp.TyHelper;
+//import com.bb_sz.tycp.TyCaiPiao;
+//import com.bb_sz.tycp.TyHelper;
+import com.bb_sz.tcpip.TcpIp;
 import com.bb_sz.umhelper.UMHelper;
 import com.bb_sz.windows.WinLinstener;
 
@@ -75,9 +75,9 @@ public class TManager {
             if (null != options && options.size() > 0)
                 MulCSignApk.run(options.get(0));
         } else if ("-f".equals(line) || "-t".equals(line)) {
-            TyCaiPiao.main(null);
+//            TyCaiPiao.main(null);
         } else if ("-g".equals(line) || "-b".equals(line)) {
-            TyHelper.main(null);
+//            TyHelper.main(null);
         } else if ("-dd".equals(line) || "-cc".equals(line)) {// 多渠道打包 不加jpay
             if (null != options && options.size() > 0)
                 MulCSignApk._run(options.get(0));
@@ -85,9 +85,11 @@ public class TManager {
             if (null != options && options.size() > 0)
                 MulCSignApk.__run(options.get(0));
         } else if ("-v".equals(line) || "-vpn".equals(line)) {// vpn
-                WinLinstener.main2(options);
+            WinLinstener.main2(options);
         } else if ("-u".equals(line) || "-um".equals(line)) {// vpn
             UMHelper.main(options.get(0));
+        } else if ("-tcp".equals(line) || "-tcpip".equals(line)) {// vpn
+            TcpIp.main(Integer.valueOf(options.get(0)));
         }
     }
 
