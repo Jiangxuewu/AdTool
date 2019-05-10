@@ -89,7 +89,11 @@ public class TManager {
         } else if ("-u".equals(line) || "-um".equals(line)) {// vpn
             UMHelper.main(options.get(0));
         } else if ("-tcp".equals(line) || "-tcpip".equals(line)) {// vpn
-            TcpIp.main(Integer.valueOf(options.get(0)));
+            if (options.size() <= 1){
+                TcpIp.main(Integer.valueOf(options.get(0)), "");
+            } else {
+                TcpIp.main(Integer.valueOf(options.get(0)), options.get(1));
+            }
         }
     }
 

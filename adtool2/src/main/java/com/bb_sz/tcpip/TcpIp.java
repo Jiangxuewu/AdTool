@@ -8,21 +8,31 @@ import com.bb_sz.tool.Log;
  */
 public class TcpIp {
 
-    public static void main(int post) {
+    public static void main(int post, String devices) {
 
 //        int post = 3042;
         String cmd = "adb tcpip " + post;
+        if (null != devices && devices.length() > 0) {
+            cmd = "adb -s " + devices + " tcpip " + post;
+        }
         CMDTools.exec(cmd);
 
         cmd = "ping localhost -n 3 > nul";
         CMDTools.exec(cmd);
 
         cmd = "adb shell ifconfig wlan0 | findstr \"inet addr:\"";
+        if (null != devices && devices.length() > 0) {
+            cmd = "adb -s " + devices + " shell ifconfig wlan0 | findstr \"inet addr:\"";
+        }
+
         String value = CMDTools.exec(cmd);
 
         String ip = getIp(value);
 
         cmd = "adb connect " + ip + ":" + post;
+        if (null != devices && devices.length() > 0) {
+            cmd = "adb -s " + devices + "  connect " + ip + ":" + post;
+        }
         value = CMDTools.exec(cmd);
 
         Log.i("TcpIp", "value = " + value);
