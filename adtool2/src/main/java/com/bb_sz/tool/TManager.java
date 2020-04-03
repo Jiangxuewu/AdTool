@@ -1,5 +1,6 @@
 package com.bb_sz.tool;
 import com.bb_sz.adtool.AdTool;
+import com.bb_sz.hprof.HprofResult;
 import com.bb_sz.mulchannelapk.MulCSignApk;
 import com.bb_sz.shell.Shell;
 //import com.bb_sz.tycp.TyCaiPiao;
@@ -61,6 +62,13 @@ public class TManager {
 
     private static void run(String line, ArrayList<String> options) {
         if (debug) Log.i(TAG, "run line = " + line);
+        if (debug) {
+            if (null != options) {
+                for (String  items : options) {
+                    Log.i(TAG, items);
+                }
+            }
+        }
         if (null == line) return;
         if ("-v".equals(line) || "-version".equals(line)) {
             System.out.print(Version.getVersion() + " \n");
@@ -94,6 +102,8 @@ public class TManager {
             } else {
                 TcpIp.main(Integer.valueOf(options.get(0)), options.get(1));
             }
+        } else if ("-hr".equals(line)) {
+            HprofResult.main(options);
         }
     }
 

@@ -1,11 +1,16 @@
 package com.bb_sz.shell;
 
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 /**
  * Created by Administrator on 2016/9/23.
@@ -164,5 +169,23 @@ public class FileTools {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void saveStringToFile(String line, File file, boolean append){
+//        try {
+
+//            FileOutputStream outStream = new FileOutputStream(file);
+//            FileOutputStream outStream = new FileOutputStream(new FileOutputStream(file, append), 123);
+//            Writer wr = new OutputStreamWriter(outStream);
+//            BufferedWriter writer = new BufferedWriter(wr);
+//            writer.write(line + "\n\r");
+
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//
+//        }
     }
 }
